@@ -16,8 +16,8 @@ namespace PlotCharts
     {
 
         DxpSimpleAPI.DxpSimpleClass opc = new DxpSimpleAPI.DxpSimpleClass();
-        public int spentTime=0, count=0, totalCount=20;
-        public double currentTemp, nextTemp, currentTime = 0, compTime;
+        public int spentTime=0, count=0, compTemp, totalCount=20;
+        public double currentTemp, nextTemp, currentTime = 0;
         public bool firstStep = true;
         const int TEM_POS = 1500;
         const int MST_POS = 1550;
@@ -80,7 +80,7 @@ namespace PlotCharts
                             for(; count < totalCount; count++){
                                 if(Convert.ToInt32(dataGridView1.Rows[count].Cells[2].Value) != 0){
                                     nextTemp=Convert.ToInt32(dataGridView1.Rows[count].Cells[1].Value);
-                                    compTime = (currentTemp > nextTemp) ? 0.01 : 0.02;
+                                    compTemp = (currentTemp > nextTemp) ? -10 : 5;
                                     count--;
                                     break;
                                 }
@@ -90,51 +90,49 @@ namespace PlotCharts
                             Debug.WriteLine("\nPeform Calculation:\nCurrent Temp: " + currentTemp +"\n Next Temp: "+ nextTemp);
                             for (; currentTemp != nextTemp; )
                             {
-                                if (currentTemp == nextTemp && compTime == 5)
+                                if (currentTemp >= nextTemp && compTemp == 5)
                                 {
-                                //    if (currentTemp != nextTemp) {
-                                //        Debug.WriteLine("Not enough");
-                                //        currentTemp = currentTemp - compTime;
-                                //        currentTime -= 1;
-                                //        Debug.WriteLine("Current Temp: " + currentTemp + "\nCurrent Time: " + currentTime);
-                                //        currentTemp += 1;
-                                //        for (; currentTemp <= nextTemp; currentTemp = currentTemp + 1)
-                                //        {
-                                //            currentTime += 0.2;
-                                //            chart1.Series["Temperature"].Points.AddXY(currentTime, currentTemp);
-                                //            Debug.WriteLine("Coordinates: (" + currentTime + ", " + currentTemp + ")");
-                                //        }
-                                //    }
-                                //    Debug.WriteLine("Reached " + nextTemp + " Current Temp: " + currentTemp);
-                                //    break;
+                                    if (currentTemp != nextTemp) {
+                                        Debug.WriteLine("Not enough");
+                                        currentTemp = currentTemp - compTemp;
+                                        currentTime -= 1;
+                                        Debug.WriteLine("Current Temp: " + currentTemp + "\nCurrent Time: " + currentTime);
+                                        currentTemp += 1;
+                                        for (; currentTemp <= nextTemp; currentTemp = currentTemp + 1)
+                                        {
+                                            currentTime += 0.2;
+                                            chart1.Series["Temperature"].Points.AddXY(currentTime, currentTemp);
+                                            Debug.WriteLine("Coordinates: (" + currentTime + ", " + currentTemp + ")");
+                                        }
+                                    }
+                                    Debug.WriteLine("Reached " + nextTemp + " Current Temp: " + currentTemp);
                                     break;
                                 }
-                                else if (currentTemp == nextTemp && compTime == -10)
+                                else if (currentTemp <= nextTemp && compTemp == -10)
                                 {
-                                //    if (currentTemp != nextTemp)
-                                //    {
-                                //        Debug.WriteLine("Not enough");
-                                //        currentTemp = currentTemp - compTime;
-                                //        currentTime -= 1;
-                                //        Debug.WriteLine("Current Temp: " + currentTemp + "\nCurrent Time: " + currentTime);
-                                //        currentTemp -= 1;
-                                //        for (; currentTemp >= nextTemp; currentTemp = currentTemp - 1)
-                                //        {
-                                //            currentTime += 0.1;
-                                //            chart1.Series["Temperature"].Points.AddXY(currentTime, currentTemp);
-                                //            Debug.WriteLine("Coordinates: (" + currentTime + ", " + currentTemp + ")");
-                                //        }
-                                //    }
-                                //    Debug.WriteLine("Reached " + nextTemp + " Current Temp: " + currentTemp);
-                                //    break;
+                                    if (currentTemp != nextTemp)
+                                    {
+                                        Debug.WriteLine("Not enough");
+                                        currentTemp = currentTemp - compTemp;
+                                        currentTime -= 1;
+                                        Debug.WriteLine("Current Temp: " + currentTemp + "\nCurrent Time: " + currentTime);
+                                        currentTemp -= 1;
+                                        for (; currentTemp >= nextTemp; currentTemp = currentTemp - 1)
+                                        {
+                                            currentTime += 0.1;
+                                            chart1.Series["Temperature"].Points.AddXY(currentTime, currentTemp);
+                                            Debug.WriteLine("Coordinates: (" + currentTime + ", " + currentTemp + ")");
+                                        }
+                                    }
+                                    Debug.WriteLine("Reached " + nextTemp + " Current Temp: " + currentTemp);
                                     break;
                                 }
                                 else
                                 {
                                     chart1.Series["Temperature"].Points.AddXY(currentTime, currentTemp);
                                     Debug.WriteLine("Coordinates: (" + currentTime + ", " + currentTemp + ")");
-                                    currentTemp = Math.Round(currentTemp + 0.1,1);
-                                    currentTime = Math.Round(currentTime + compTime,1);
+                                    currentTemp = currentTemp + compTemp;
+                                    currentTime = currentTime + 1;
                                     continue;
                                 }
                             }
