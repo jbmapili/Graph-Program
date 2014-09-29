@@ -16,9 +16,7 @@ namespace PlotCharts
     {
         DxpSimpleAPI.DxpSimpleClass opc = new DxpSimpleAPI.DxpSimpleClass();
         public int count=0, compTemp, totalCount=20, point=0;
-        public double currentTemp, nextTemp, currentTime = 0, 
-                      decimalValue, wholeValue, addTimeWhole, 
-                      addTemp, addTimeDecimal;
+        public double currentTemp, nextTemp, currentTime = 0, decimalValue, wholeValue;
         public bool firstStep = true;
         const int TEM_POS = 1500;
         const int MST_POS = 1550;
@@ -75,104 +73,76 @@ namespace PlotCharts
                             {
                                 nextTemp = Convert.ToDouble(dataGridView1.Rows[count].Cells[1].Value);
                                 compTemp = (currentTemp > nextTemp) ? -10 : 5;
-                                addTimeWhole = compTemp == 5 ? 0.2 : 0.1;
-                                addTimeDecimal=
-                                //addTemp = compTemp == 5? 
                                 count--;
                                 break;
                             }
                         }
-                        //perform calculation v.2
-                        Debug.WriteLine(currentTemp);
-                        double exact = Math.Floor((nextTemp - currentTemp) / compTemp);
-                        double excess = compTemp > 0 ? nextTemp - (currentTemp + (exact * compTemp)) : (currentTemp + (exact * compTemp)) - nextTemp;
-                        plot_Calc_Exact(exact);
-                        wholeValue = Math.Floor(excess / 1);
-                        plot_Calc_Whole(wholeValue, addTimeWhole);
-                        decimalValue = excess % 1;
-                        plot_Calc_Decimal(decimalValue);
-                        Debug.WriteLine("Exact: " + exact + "\nExcess: " + excess + "\nWhole Value: " + wholeValue + "\nDecimal Value: " + decimalValue);
-
 
                         //perform calculation                    
-                        //for (; currentTemp != nextTemp; )
-                        //{
-                        //    if (currentTemp >= nextTemp && compTemp == 5)
-                        //    {
-                        //        if (currentTemp != nextTemp)
-                        //        {
-                        //            not_Enough();
-                        //            currentTemp += 1;
-                        //            for (; currentTemp <= nextTemp; currentTemp = currentTemp + 1)
-                        //            {
-                        //                double add_Not_Enough = 0.2;
-                        //                add_Whole(add_Not_Enough);
-                        //            }
-                        //            currentTemp -= 1;
-                        //            nextTemp = nextTemp + decimalValue;
-                        //            currentTemp = (decimalValue != 0) ? currentTemp + 0.1 : currentTemp;
-                        //            for (; currentTemp < nextTemp; currentTemp = currentTemp + 0.1)
-                        //            {
-                        //                double add_Not_Enough = 0.02;
-                        //                add_Whole(add_Not_Enough);
-                        //            }
-                        //        }
-                        //        currentTime += 0.02;
-                        //        break;
-                        //    }
-                        //    else if (currentTemp <= nextTemp && compTemp == -10)
-                        //    {
-                        //        if (currentTemp != nextTemp)
-                        //        {
-                        //            not_Enough();
-                        //            currentTemp -= 1;
-                        //            for (; currentTemp >= nextTemp; currentTemp = currentTemp - 1)
-                        //            {
-                        //                double add_Not_Enough = 0.1;
-                        //                add_Whole(add_Not_Enough);
-                        //            }
-                        //            currentTemp += 1;
-                        //            nextTemp = nextTemp + decimalValue;
-                        //            currentTemp = (decimalValue != 0) ? currentTemp - 0.1 : currentTemp;
-                        //            for (; currentTemp > nextTemp; currentTemp = currentTemp - 0.1)
-                        //            {
-                        //                double add_Not_Enough = 0.01;
-                        //                add_Whole(add_Not_Enough);
-                        //            }
-                        //        }
-                        //        currentTime += 0.01;
-                        //        break;
-                        //    }
-                        //    else
-                        //    {
-                        //        chart1.Series["Temperature"].Points.AddXY(currentTime, currentTemp);
-                        //        currentTemp = currentTemp + compTemp;
-                        //        currentTime = currentTime + 1;
-                        //        point++;
-                        //        continue;
-                        //    }
-                        //}
+                        for (; currentTemp != nextTemp; )
+                        {
+                            if (currentTemp >= nextTemp && compTemp == 5)
+                            {
+                                if (currentTemp != nextTemp)
+                                {
+                                    not_Enough();
+                                    currentTemp += 1;
+                                    for (; currentTemp <= nextTemp; currentTemp = currentTemp + 1)
+                                    {
+                                        double add_Not_Enough = 0.2;
+                                        add_Whole(add_Not_Enough);
+                                    }
+                                    currentTemp -= 1;
+                                    nextTemp = nextTemp + decimalValue;
+                                    currentTemp = (decimalValue != 0) ? currentTemp + 0.1 : currentTemp;
+                                    for (; currentTemp < nextTemp; currentTemp = currentTemp + 0.1)
+                                    {
+                                        double add_Not_Enough = 0.02;
+                                        add_Whole(add_Not_Enough);
+                                    }
+                                }
+                                currentTime += 0.02;
+                                break;
+                            }
+                            else if (currentTemp <= nextTemp && compTemp == -10)
+                            {
+                                if (currentTemp != nextTemp)
+                                {
+                                    not_Enough();
+                                    currentTemp -= 1;
+                                    for (; currentTemp >= nextTemp; currentTemp = currentTemp - 1)
+                                    {
+                                        double add_Not_Enough = 0.1;
+                                        add_Whole(add_Not_Enough);
+                                    }
+                                    currentTemp += 1;
+                                    nextTemp = nextTemp + decimalValue;
+                                    currentTemp = (decimalValue != 0) ? currentTemp - 0.1 : currentTemp;
+                                    for (; currentTemp > nextTemp; currentTemp = currentTemp - 0.1)
+                                    {
+                                        double add_Not_Enough = 0.01;
+                                        add_Whole(add_Not_Enough);
+                                    }
+                                }
+                                currentTime += 0.01;
+                                break;
+                            }
+                            else
+                            {
+                                chart1.Series["Temperature"].Points.AddXY(currentTime, currentTemp);
+                                currentTemp = currentTemp + compTemp;
+                                currentTime = currentTime + 1;
+                                point++;
+                                continue;
+                            }
+                        }
                     }
                     continue;
                 }
                 chart1.ChartAreas[0].AxisX.Maximum = Math.Ceiling(currentTime);
             }
         }
-        private void plot_Calc_Whole(double wholeValue, double addTime)
-        {
-            currentTemp = (wholeValue * 1) + currentTemp;
-            currentTime = currentTime + (wholeValue * addTime);
-            chart1.Series["Temperature"].Points.AddXY(currentTime, currentTemp);
-        }
-        private void plot_Calc_Decimal(double decimalValue)
-        {
-        }
-        private void plot_Calc_Exact(double exact)
-        {
-            currentTemp = (exact * compTemp) + currentTemp;
-            currentTime = currentTime + exact;
-            chart1.Series["Temperature"].Points.AddXY(currentTime, currentTemp);
-        }
+
         private void add_Whole(double addValue)
         {
             currentTime += addValue;
