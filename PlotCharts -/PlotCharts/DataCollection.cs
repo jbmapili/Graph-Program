@@ -15,6 +15,5 @@ namespace PlotCharts
 
         public string Unit { get; set; }
 
-        public string Pause { get; set; }
     }
 }

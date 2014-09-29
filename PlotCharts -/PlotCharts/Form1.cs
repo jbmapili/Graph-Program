@@ -14,17 +14,17 @@ namespace PlotCharts
 {
     public partial class Form1 : Form
     {
-
         DxpSimpleAPI.DxpSimpleClass opc = new DxpSimpleAPI.DxpSimpleClass();
-        public int spentTime=0, count=0, compTemp, totalCount=20;
-        public double currentTemp, nextTemp, currentTime = 0;
+        public int count=0, compTemp, totalCount=20, point=0;
+        public double currentTemp, nextTemp, currentTime = 0, 
+                      decimalValue, wholeValue, addTimeWhole, 
+                      addTemp, addTimeDecimal;
         public bool firstStep = true;
         const int TEM_POS = 1500;
         const int MST_POS = 1550;
         const int LOWER_TIME_POS = 1600;
         const int UNIT_BIT_POS = 1500;
         const int STEP_OFFSET = 50;
-        const int PAUSE_BIT_POS = 1700;
         const double minValue = -100.0;
         const double maxValue = 100.0;
         const string DEV_NAME = "DEV1";
@@ -41,119 +41,166 @@ namespace PlotCharts
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            chart1.ChartAreas[0].AxisX.ScaleView.Zoom(0, 1);
-            chart1.ChartAreas[0].AxisY.ScaleView.Zoom(0, 15);
-            if(opc.Connect("localhost", "Takebishi.dxp"))
+            Initialize();
+        }
+
+        private void Initialize()
+        {
+            if (opc.Connect("localhost", "Takebishi.dxp"))
             {
-                    ReadValues();
-                    totalCount = data.Count;
-                    dataGridView1.DataSource = data;
-                    for (; count < totalCount ; count++) 
+                chart1.ChartAreas[0].AxisY.ScaleView.Zoom(0, 15);
+                dataGridView1.DefaultCellStyle.SelectionBackColor = dataGridView1.DefaultCellStyle.BackColor;
+                dataGridView1.DefaultCellStyle.SelectionForeColor = dataGridView1.DefaultCellStyle.ForeColor;
+                ReadValues();
+                totalCount = data.Count;
+                dataGridView1.DataSource = data;
+                for (; count < totalCount; count++)
+                {
+                    if (Convert.ToDouble(dataGridView1.Rows[count].Cells[2].Value) != 0)
                     {
-                        Debug.WriteLine("Continue" + count);
-                        if (Convert.ToInt32(dataGridView1.Rows[count].Cells[2].Value) != 0)
+                        //first value
+                        currentTemp = Convert.ToDouble(dataGridView1.Rows[count].Cells[1].Value);
+                        point_Plot("start");
+
+                        //plot whole the next step
+                        string unit = dataGridView1.Rows[count].Cells[3].Value.ToString();
+                        currentTime=currentTime+(toHour(Convert.ToDouble(dataGridView1.Rows[count].Cells[2].Value),unit.Equals("second")? 3600: unit.Equals("minute")? 60 : 1));
+                        point_Plot("end");
+
+                        //search for next value
+                        count++;
+                        for (; count < totalCount; count++)
                         {
-                            //first value
-                            currentTemp = Convert.ToDouble(dataGridView1.Rows[count].Cells[1].Value);
-                            chart1.Series["Temperature"].Points.AddXY(currentTime, currentTemp);
-                            Debug.WriteLine("First Coordinates: " + currentTime + "," + currentTemp);
-
-                            //plot whole the next step
-                            string unit = dataGridView1.Rows[count].Cells[3].Value.ToString();
-                            if (("second").Equals(unit))
+                            if (Convert.ToInt32(dataGridView1.Rows[count].Cells[2].Value) != 0)
                             {
-                                currentTime = currentTime + Math.Round(secToHour(Convert.ToInt32(dataGridView1.Rows[count].Cells[2].Value)),4);
-                            }
-                            else if (("minute").Equals(unit))
-                            {
-                                currentTime = currentTime + Math.Round(minToHour(Convert.ToInt32(dataGridView1.Rows[count].Cells[2].Value)), 4);
-                            }
-                            else
-                            {
-                                currentTime = currentTime + Convert.ToInt32(dataGridView1.Rows[count].Cells[2].Value);
-                            }
-                            chart1.Series["Temperature"].Points.AddXY(currentTime, currentTemp);
-                            Debug.WriteLine(" Next Coordinates: " + currentTime + "," + currentTemp);
-
-                            //search for next value
-                            count++;
-                            for(; count < totalCount; count++){
-                                if(Convert.ToInt32(dataGridView1.Rows[count].Cells[2].Value) != 0){
-                                    nextTemp=Convert.ToInt32(dataGridView1.Rows[count].Cells[1].Value);
-                                    compTemp = (currentTemp > nextTemp) ? -10 : 5;
-                                    count--;
-                                    break;
-                                }
-                            }
-
-                            //perform calculation                    
-                            Debug.WriteLine("\nPeform Calculation:\nCurrent Temp: " + currentTemp +"\n Next Temp: "+ nextTemp);
-                            for (; currentTemp != nextTemp; )
-                            {
-                                if (currentTemp >= nextTemp && compTemp == 5)
-                                {
-                                    if (currentTemp != nextTemp) {
-                                        Debug.WriteLine("Not enough");
-                                        currentTemp = currentTemp - compTemp;
-                                        currentTime -= 1;
-                                        Debug.WriteLine("Current Temp: " + currentTemp + "\nCurrent Time: " + currentTime);
-                                        currentTemp += 1;
-                                        for (; currentTemp <= nextTemp; currentTemp = currentTemp + 1)
-                                        {
-                                            currentTime += 0.2;
-                                            chart1.Series["Temperature"].Points.AddXY(currentTime, currentTemp);
-                                            Debug.WriteLine("Coordinates: (" + currentTime + ", " + currentTemp + ")");
-                                        }
-                                    }
-                                    Debug.WriteLine("Reached " + nextTemp + " Current Temp: " + currentTemp);
-                                    break;
-                                }
-                                else if (currentTemp <= nextTemp && compTemp == -10)
-                                {
-                                    if (currentTemp != nextTemp)
-                                    {
-                                        Debug.WriteLine("Not enough");
-                                        currentTemp = currentTemp - compTemp;
-                                        currentTime -= 1;
-                                        Debug.WriteLine("Current Temp: " + currentTemp + "\nCurrent Time: " + currentTime);
-                                        currentTemp -= 1;
-                                        for (; currentTemp >= nextTemp; currentTemp = currentTemp - 1)
-                                        {
-                                            currentTime += 0.1;
-                                            chart1.Series["Temperature"].Points.AddXY(currentTime, currentTemp);
-                                            Debug.WriteLine("Coordinates: (" + currentTime + ", " + currentTemp + ")");
-                                        }
-                                    }
-                                    Debug.WriteLine("Reached " + nextTemp + " Current Temp: " + currentTemp);
-                                    break;
-                                }
-                                else
-                                {
-                                    chart1.Series["Temperature"].Points.AddXY(currentTime, currentTemp);
-                                    Debug.WriteLine("Coordinates: (" + currentTime + ", " + currentTemp + ")");
-                                    currentTemp = currentTemp + compTemp;
-                                    currentTime = currentTime + 1;
-                                    continue;
-                                }
+                                nextTemp = Convert.ToDouble(dataGridView1.Rows[count].Cells[1].Value);
+                                compTemp = (currentTemp > nextTemp) ? -10 : 5;
+                                addTimeWhole = compTemp == 5 ? 0.2 : 0.1;
+                                addTimeDecimal=
+                                //addTemp = compTemp == 5? 
+                                count--;
+                                break;
                             }
                         }
-                        continue;
+                        //perform calculation v.2
+                        Debug.WriteLine(currentTemp);
+                        double exact = Math.Floor((nextTemp - currentTemp) / compTemp);
+                        double excess = compTemp > 0 ? nextTemp - (currentTemp + (exact * compTemp)) : (currentTemp + (exact * compTemp)) - nextTemp;
+                        plot_Calc_Exact(exact);
+                        wholeValue = Math.Floor(excess / 1);
+                        plot_Calc_Whole(wholeValue, addTimeWhole);
+                        decimalValue = excess % 1;
+                        plot_Calc_Decimal(decimalValue);
+                        Debug.WriteLine("Exact: " + exact + "\nExcess: " + excess + "\nWhole Value: " + wholeValue + "\nDecimal Value: " + decimalValue);
+
+
+                        //perform calculation                    
+                        //for (; currentTemp != nextTemp; )
+                        //{
+                        //    if (currentTemp >= nextTemp && compTemp == 5)
+                        //    {
+                        //        if (currentTemp != nextTemp)
+                        //        {
+                        //            not_Enough();
+                        //            currentTemp += 1;
+                        //            for (; currentTemp <= nextTemp; currentTemp = currentTemp + 1)
+                        //            {
+                        //                double add_Not_Enough = 0.2;
+                        //                add_Whole(add_Not_Enough);
+                        //            }
+                        //            currentTemp -= 1;
+                        //            nextTemp = nextTemp + decimalValue;
+                        //            currentTemp = (decimalValue != 0) ? currentTemp + 0.1 : currentTemp;
+                        //            for (; currentTemp < nextTemp; currentTemp = currentTemp + 0.1)
+                        //            {
+                        //                double add_Not_Enough = 0.02;
+                        //                add_Whole(add_Not_Enough);
+                        //            }
+                        //        }
+                        //        currentTime += 0.02;
+                        //        break;
+                        //    }
+                        //    else if (currentTemp <= nextTemp && compTemp == -10)
+                        //    {
+                        //        if (currentTemp != nextTemp)
+                        //        {
+                        //            not_Enough();
+                        //            currentTemp -= 1;
+                        //            for (; currentTemp >= nextTemp; currentTemp = currentTemp - 1)
+                        //            {
+                        //                double add_Not_Enough = 0.1;
+                        //                add_Whole(add_Not_Enough);
+                        //            }
+                        //            currentTemp += 1;
+                        //            nextTemp = nextTemp + decimalValue;
+                        //            currentTemp = (decimalValue != 0) ? currentTemp - 0.1 : currentTemp;
+                        //            for (; currentTemp > nextTemp; currentTemp = currentTemp - 0.1)
+                        //            {
+                        //                double add_Not_Enough = 0.01;
+                        //                add_Whole(add_Not_Enough);
+                        //            }
+                        //        }
+                        //        currentTime += 0.01;
+                        //        break;
+                        //    }
+                        //    else
+                        //    {
+                        //        chart1.Series["Temperature"].Points.AddXY(currentTime, currentTemp);
+                        //        currentTemp = currentTemp + compTemp;
+                        //        currentTime = currentTime + 1;
+                        //        point++;
+                        //        continue;
+                        //    }
+                        //}
                     }
+                    continue;
+                }
+                chart1.ChartAreas[0].AxisX.Maximum = Math.Ceiling(currentTime);
             }
         }
-
-
-        private double secToHour(double sec)
+        private void plot_Calc_Whole(double wholeValue, double addTime)
         {
-            sec = sec / 3600;
-            Debug.WriteLine("Converted value sec: " + sec);
-            return sec;
+            currentTemp = (wholeValue * 1) + currentTemp;
+            currentTime = currentTime + (wholeValue * addTime);
+            chart1.Series["Temperature"].Points.AddXY(currentTime, currentTemp);
         }
-        private double minToHour(double min)
+        private void plot_Calc_Decimal(double decimalValue)
         {
-            min = min / 60;
-            Debug.WriteLine("Converted value min: " + min);
-            return min;
+        }
+        private void plot_Calc_Exact(double exact)
+        {
+            currentTemp = (exact * compTemp) + currentTemp;
+            currentTime = currentTime + exact;
+            chart1.Series["Temperature"].Points.AddXY(currentTime, currentTemp);
+        }
+        private void add_Whole(double addValue)
+        {
+            currentTime += addValue;
+            chart1.Series["Temperature"].Points.AddXY(currentTime, currentTemp);
+            point++;
+        }
+
+        private void point_Plot(string startEnd)
+        {            
+            chart1.Series["Temperature"].Points.AddXY(currentTime, currentTemp);
+            chart1.Series["Temperature"].Points[point].Label = string.Format("{0}-{1}", count+1, startEnd);
+            point++;
+        }
+
+        private void not_Enough()
+        {
+            currentTemp = currentTemp - compTemp;
+            decimalValue = Math.Round((nextTemp - currentTemp) % 1, 1);
+            wholeValue = Convert.ToInt32((nextTemp - currentTemp) / 1);
+            wholeValue = ((wholeValue + decimalValue) == (nextTemp - currentTemp)) ? wholeValue : wholeValue - 1;
+            nextTemp = nextTemp - decimalValue;
+            currentTime -= 1;
+        }
+
+
+        private double toHour(double valTime, int valDiv)
+        {
+            return Math.Round(valTime / valDiv,2);
         }
         private void ReadValues()
         {
@@ -170,27 +217,58 @@ namespace PlotCharts
                                       DEV_NAME + "." + BIT_REG_PREFIX + "" + (UNIT_BIT_POS + (step + 1)), // get unit seconds
                                       DEV_NAME + "." + BIT_REG_PREFIX + "" + (UNIT_BIT_POS + STEP_OFFSET + (step + 1)), // get unit minutes
                                       DEV_NAME + "." + BIT_REG_PREFIX + "" + (UNIT_BIT_POS + (STEP_OFFSET * 2) + (step + 1)), // get unit hours
-                                      DEV_NAME + "." + BIT_REG_PREFIX + "" + (PAUSE_BIT_POS + (step + 1)), // get pause value
                                   };
-                if (opc.Read(target, out oValueArray, out wQualityArray, out fTimeArray, out nErrorArray))
-                {
-                    Debug.WriteLine("Read Succeed");
-                    double rawValueTemp = Convert.ToDouble(oValueArray[0]);
-                    double newVal = minValue + ((maxValue - minValue) * (rawValueTemp - 0)) / (MAX_DIGIT - 0);
-                    data.Add(new DataCollection { 
-                                                     Step = step + 1, 
-                                                     Temperature = newVal != -100 ? Math.Round(newVal,1) : 0, 
-                                                     Time = Convert.ToInt32(oValueArray[1]) + (Convert.ToInt32(oValueArray[2]) * 10000),
-                                                     Unit = Convert.ToInt32(oValueArray[3]) == 1 ? "second" : Convert.ToInt32(oValueArray[4]) == 1 ? "minute" : "hour",
-                                                     Pause = Convert.ToInt32(oValueArray[6]) == 1 ? "Yes" : "No"
-                                                }
-                            );
+                try 
+                { 
+                    if (opc.Read(target, out oValueArray, out wQualityArray, out fTimeArray, out nErrorArray))
+                    {
+                        double rawValueTemp = Convert.ToDouble(oValueArray[0]);
+                        double newVal = minValue + ((maxValue - minValue) * (rawValueTemp - 0)) / (MAX_DIGIT - 0);
+                        data.Add(new DataCollection { 
+                                                         Step = step + 1, 
+                                                         Temperature = newVal != -100 ? Math.Round(newVal,1) : 0, 
+                                                         Time = Convert.ToInt32(oValueArray[1]) + (Convert.ToInt32(oValueArray[2]) * 10000),
+                                                         Unit = Convert.ToInt32(oValueArray[3]) == 1 ? "second" : Convert.ToInt32(oValueArray[4]) == 1 ? "minute" : "hour"
+                                                    }
+                                );
+                    }
                 }
-                else
-                {
-                    Debug.WriteLine("Read Error");
-                }
+                catch (Exception) { }
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            count = point = 0;
+            currentTime = currentTemp = 0;
+            data.Clear();
+            chart1.Series["Temperature"].Points.Clear();
+            Initialize();
+            dataGridView1.SelectAll();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            PrintingManager printManager = chart1.Printing;
+            chart1.Printing.PrintDocument.DefaultPageSettings.Margins.Top = 
+            chart1.Printing.PrintDocument.DefaultPageSettings.Margins.Left = 
+            chart1.Printing.PrintDocument.DefaultPageSettings.Margins.Bottom = 
+            chart1.Printing.PrintDocument.DefaultPageSettings.Margins.Right = 10;
+            printManager.PrintDocument.DefaultPageSettings.Landscape = true;
+            chart1.Printing.PrintPreview();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog save = new SaveFileDialog();
+            save.Filter = "Png Image|*.png|JPeg Image|*.jpg|Bitmap Image|*.bmp";
+            save.Title = "Save the File";
+            if (save.ShowDialog() == DialogResult.OK)
+            {
+                string fName = save.FileName;
+                this.chart1.SaveImage(fName, ChartImageFormat.Png);
+            }
+
         }
     }
 }
