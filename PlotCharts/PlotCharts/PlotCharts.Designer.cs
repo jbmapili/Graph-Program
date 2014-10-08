@@ -1,6 +1,6 @@
 ﻿namespace PlotCharts
 {
-    partial class Form1
+    partial class PlotCharts
     {
         /// <summary>
         /// Required designer variable.
@@ -41,6 +41,7 @@
             this.btnPrint = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
@@ -58,34 +59,35 @@
             chartArea2.AxisX.ScrollBar.IsPositionedInside = false;
             chartArea2.AxisX.ScrollBar.LineColor = System.Drawing.Color.Gray;
             chartArea2.AxisX.ScrollBar.Size = 12D;
-            chartArea2.AxisX.Title = "Time";
+            chartArea2.AxisX.Title = "時間";
             chartArea2.AxisY.ScrollBar.BackColor = System.Drawing.Color.White;
             chartArea2.AxisY.ScrollBar.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             chartArea2.AxisY.ScrollBar.ButtonStyle = System.Windows.Forms.DataVisualization.Charting.ScrollBarButtonStyles.ResetZoom;
             chartArea2.AxisY.ScrollBar.IsPositionedInside = false;
             chartArea2.AxisY.ScrollBar.LineColor = System.Drawing.Color.Silver;
             chartArea2.AxisY.ScrollBar.Size = 12D;
-            chartArea2.AxisY.Title = "Temp";
+            chartArea2.AxisY.TextOrientation = System.Windows.Forms.DataVisualization.Charting.TextOrientation.Stacked;
+            chartArea2.AxisY.Title = "温度";
             chartArea2.Name = "ChartArea1";
             this.chart1.ChartAreas.Add(chartArea2);
             legend2.Name = "Legend1";
-            legend2.Title = "Legend";
+            legend2.Title = "凡例";
             this.chart1.Legends.Add(legend2);
-            this.chart1.Location = new System.Drawing.Point(12, 11);
+            this.chart1.Location = new System.Drawing.Point(12, 12);
             this.chart1.Name = "chart1";
             series2.BorderWidth = 3;
             series2.ChartArea = "ChartArea1";
             series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
             series2.Color = System.Drawing.Color.Red;
             series2.Legend = "Legend1";
-            series2.Name = "Temperature";
+            series2.Name = "温度";
             this.chart1.Series.Add(series2);
-            this.chart1.Size = new System.Drawing.Size(679, 364);
+            this.chart1.Size = new System.Drawing.Size(679, 394);
             this.chart1.TabIndex = 1;
             this.chart1.Text = "chart1";
             title2.Font = new System.Drawing.Font("Arial", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             title2.Name = "Title1";
-            title2.Text = "Graph for Temperature";
+            title2.Text = "予想試験時間グラフ";
             this.chart1.Titles.Add(title2);
             // 
             // dataGridView1
@@ -114,7 +116,7 @@
             dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle5;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 381);
+            this.dataGridView1.Location = new System.Drawing.Point(12, 413);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
@@ -127,60 +129,70 @@
             this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.dataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.dataGridView1.RowTemplate.Height = 21;
-            this.dataGridView1.Size = new System.Drawing.Size(679, 150);
+            this.dataGridView1.Size = new System.Drawing.Size(679, 163);
             this.dataGridView1.TabIndex = 3;
             // 
             // btnReset
             // 
             this.btnReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnReset.Location = new System.Drawing.Point(553, 255);
+            this.btnReset.Location = new System.Drawing.Point(582, 276);
             this.btnReset.Name = "btnReset";
-            this.btnReset.Size = new System.Drawing.Size(116, 21);
+            this.btnReset.Size = new System.Drawing.Size(96, 23);
             this.btnReset.TabIndex = 4;
-            this.btnReset.Text = "Reset";
+            this.btnReset.Text = "リセット";
             this.btnReset.UseVisualStyleBackColor = true;
             this.btnReset.Click += new System.EventHandler(this.button1_Click);
             // 
             // btnPrint
             // 
             this.btnPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnPrint.Location = new System.Drawing.Point(553, 282);
+            this.btnPrint.Location = new System.Drawing.Point(582, 306);
             this.btnPrint.Name = "btnPrint";
-            this.btnPrint.Size = new System.Drawing.Size(116, 21);
+            this.btnPrint.Size = new System.Drawing.Size(96, 23);
             this.btnPrint.TabIndex = 5;
-            this.btnPrint.Text = "Print Graph";
+            this.btnPrint.Text = "印刷";
             this.btnPrint.UseVisualStyleBackColor = true;
             this.btnPrint.Click += new System.EventHandler(this.button2_Click);
             // 
             // btnSave
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSave.Location = new System.Drawing.Point(553, 309);
+            this.btnSave.Location = new System.Drawing.Point(582, 335);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(116, 21);
+            this.btnSave.Size = new System.Drawing.Size(96, 23);
             this.btnSave.TabIndex = 6;
-            this.btnSave.Text = "Save Graph";
+            this.btnSave.Text = "画像保存";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.button3_Click);
             // 
-            // Form1
+            // label1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 393);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(112, 13);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "プログラム運転設定値";
+            // 
+            // PlotCharts
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(703, 538);
+            this.ClientSize = new System.Drawing.Size(703, 583);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnPrint);
             this.Controls.Add(this.btnReset);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.chart1);
-            this.Name = "Form1";
+            this.Name = "PlotCharts";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Graph Program";
-            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -192,6 +204,7 @@
         private System.Windows.Forms.Button btnPrint;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.Label label1;
     }
 }
 
