@@ -28,3 +28,27 @@ C:\Users\pc\Desktop\Currently Creating\PlotCharts - Copy (2)\PlotCharts\obj\x86\
 C:\Users\pc\Desktop\Currently Creating\PlotCharts - Copy (2)\PlotCharts\obj\x86\Debug\PlotCharts.pdb
 C:\Users\Administrator\Documents\GitHub\Graph-Program\PlotCharts -\PlotCharts\obj\x86\Debug\PlotCharts.exe
 C:\Users\Administrator\Documents\GitHub\Graph-Program\PlotCharts -\PlotCharts\obj\x86\Debug\PlotCharts.pdb
+C:\Users\Administrator\Documents\GitHub\Graph-Program\PlotCharts\PlotCharts\obj\x86\Debug\PlotCharts.exe
+C:\Users\Administrator\Documents\GitHub\Graph-Program\PlotCharts\PlotCharts\obj\x86\Debug\PlotCharts.pdb
+C:\Users\Administrator\Documents\GitHub\Graph-Program\PlotCharts\PlotCharts\bin\Debug\PlotCharts.exe
+C:\Users\Administrator\Documents\GitHub\Graph-Program\PlotCharts\PlotCharts\bin\Debug\PlotCharts.pdb
+C:\Users\Administrator\Documents\GitHub\Graph-Program\PlotCharts\PlotCharts\bin\Debug\DxpSimpleAPI.dll
+C:\Users\Administrator\Documents\GitHub\Graph-Program\PlotCharts\PlotCharts\obj\x86\Debug\PlotCharts.csprojResolveAssemblyReference.cache
+C:\Users\Administrator\Documents\GitHub\Graph-Program\PlotCharts\PlotCharts\obj\x86\Debug\PlotCharts.Properties.Resources.resources
+C:\Users\Administrator\Documents\GitHub\Graph-Program\PlotCharts\PlotCharts\obj\x86\Debug\PlotCharts.csproj.GenerateResource.Cache
+C:\Users\Administrator\Documents\GitHub\Graph-Program\PlotCharts\PlotCharts\bin\Debug\ja\PlotCharts.resources.dll
+C:\Users\Administrator\Documents\GitHub\Graph-Program\PlotCharts\PlotCharts\obj\x86\Debug\PlotCharts.PlotCharts.resources
+C:\Users\Administrator\Documents\GitHub\Graph-Program\PlotCharts\PlotCharts\obj\x86\Debug\PlotCharts.PlotCharts.ja.resources
+C:\Users\Administrator\Documents\GitHub\Graph-Program\PlotCharts\PlotCharts\obj\x86\Debug\ja\PlotCharts.resources.dll
+C:\Users\pc\Desktop\Graph-Program\PlotCharts\PlotCharts\obj\x86\Debug\PlotCharts.exe
+C:\Users\pc\Desktop\Graph-Program\PlotCharts\PlotCharts\obj\x86\Debug\PlotCharts.pdb
+C:\Users\pc\Desktop\Graph-Program\PlotCharts\PlotCharts\bin\Debug\PlotCharts.exe
+C:\Users\pc\Desktop\Graph-Program\PlotCharts\PlotCharts\bin\Debug\PlotCharts.pdb
+C:\Users\pc\Desktop\Graph-Program\PlotCharts\PlotCharts\bin\Debug\ja\PlotCharts.resources.dll
+C:\Users\pc\Desktop\Graph-Program\PlotCharts\PlotCharts\bin\Debug\DxpSimpleAPI.dll
+C:\Users\pc\Desktop\Graph-Program\PlotCharts\PlotCharts\obj\x86\Debug\PlotCharts.csprojResolveAssemblyReference.cache
+C:\Users\pc\Desktop\Graph-Program\PlotCharts\PlotCharts\obj\x86\Debug\PlotCharts.PlotCharts.resources
+C:\Users\pc\Desktop\Graph-Program\PlotCharts\PlotCharts\obj\x86\Debug\PlotCharts.Properties.Resources.resources
+C:\Users\pc\Desktop\Graph-Program\PlotCharts\PlotCharts\obj\x86\Debug\PlotCharts.PlotCharts.ja.resources
+C:\Users\pc\Desktop\Graph-Program\PlotCharts\PlotCharts\obj\x86\Debug\PlotCharts.csproj.GenerateResource.Cache
+C:\Users\pc\Desktop\Graph-Program\PlotCharts\PlotCharts\obj\x86\Debug\ja\PlotCharts.resources.dll
